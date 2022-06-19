@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Examen_1_Parcial_PM1</string>
+    <string-array name="spPaises">
+        <item>Honduras (504)</item>
+        <item>Costa Rica</item>
+        <item>Guatemala (502)</item>
+        <item>El Salvador</item>
+    </string-array>
 </resources>
