@@ -60,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
         btnTomarFoto.setOnClickListener(this::onClickTakePhoto);
         btnConsultar.setOnClickListener(this::onClickMostrarContacto);
         btnActivityPaises.setOnClickListener(this::onClickActivityPaises);
+        btnConsultar.setOnClickListener(this::onClickConsulta);
+    }
+
+    private void onClickConsulta(View view) {
+        Intent lista = new Intent(getApplicationContext(), ActivityLista.class);
+        startActivity(lista);
     }
 
     private void onClickActivityPaises(View view) {
