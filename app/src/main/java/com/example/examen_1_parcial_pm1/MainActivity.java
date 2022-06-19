@@ -7,11 +7,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +23,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.examen_1_parcial_pm1.clases.Contactos;
+import com.example.examen_1_parcial_pm1.clases.SQLiteConexion;
+import com.example.examen_1_parcial_pm1.clases.Transacciones;
+
+import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
     static  final int REQUESTCODECAMARA = 100;
@@ -58,10 +66,29 @@ public class MainActivity extends AppCompatActivity {
 
     protected void agregar(){
         try {
-
+            SQLiteConexion conexion = new SQLiteConexion(getApplicationContext(), Transacciones.nameDatabase, null, 1);
+            SQLiteDatabase db = conexion.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(Transacciones.pais, spPais.getSelectedItem().toString());
+            values.put(Transacciones.nombre, txtNombre.getText().toString());
+            values.put(Transacciones.telefono, txtTelefono.getText().toString());
+            values.put(Transacciones.nota, txtNota.getText().toString());
+            values.put(Transacciones.imagen, contact.getImagen());
+            Long result = db.insert(Transacciones.tablaContactos, Transacciones.id, values);
+            message("Datos guardados exitosamente ");
+            db.close();
+            cleanFields();
         }catch (Exception ex){
             message(ex.getMessage());
         }
+    }
+
+    public void cleanFields(){
+        txtNombre.setText("");
+        txtNota.setText("");
+        txtTelefono.setText("");
+        spPais.setSelection(0);
+        imgFoto.setImageDrawable(null);
     }
 
     private void assignPermissions() {
@@ -71,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void takePhoto() {
-        Intent tomarfoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(tomarfoto,REQUESTTAKEPHOTO);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUESTTAKEPHOTO);
+        }
     }
 
-    @Override
+        @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUESTCODECAMARA) {
@@ -87,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUESTTAKEPHOTO && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imgFoto.setImageBitmap(imageBitmap);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(20480);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 0 , baos);
+            byte[] blob = baos.toByteArray();
+            contact.setImagen(blob);
+        }
     }
 
     private void init(){

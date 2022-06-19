@@ -1,20 +1,21 @@
 package com.example.examen_1_parcial_pm1.clases;
 
+import java.sql.Blob;
+
 public class Contactos {
     private Integer id;
     private String nombre;
     private String pais;
     private String telefono;
     private String nota;
-    private String pathImagen;
+    private byte[] imagen;
 
-    public Contactos(Integer id, String nombre, String pais, String telefono, String nota, String pathImagen) {
+    public Contactos(Integer id, String nombre, String pais, String telefono, String nota) {
         this.id = id;
         this.nombre = nombre;
         this.pais = pais;
         this.telefono = telefono;
         this.nota = nota;
-        this.pathImagen = pathImagen;
     }
 
     public Contactos() {
@@ -60,11 +61,11 @@ public class Contactos {
         this.nota = nota;
     }
 
-    public String getPathImagen() {
-        return pathImagen;
+    public byte[] getImagen() {
+        return imagen;
     }
 
-    public void setPathImagen(String pathImagen) {
-        this.pathImagen = pathImagen;
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
     }
 }
