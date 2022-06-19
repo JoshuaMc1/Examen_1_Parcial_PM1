@@ -14,13 +14,11 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.examen_1_parcial_pm1.clases.Contactos;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
     static  final int REQUESTCODECAMARA = 100;
@@ -99,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         spPais = (Spinner) findViewById(R.id.spPais);
         btnAgregar = (Button) findViewById(R.id.btnGuardarDatos);
         btnConsultar = (Button) findViewById(R.id.btnConsultarDatos);
-        btnActivityPaises = (Button) findViewById(R.id.btnActivityPaises);
+        btnActivityPaises = (Button) findViewById(R.id.btnTomarFoto);
         btnTomarFoto = (Button) findViewById(R.id.btnTomarFoto);
     }
 
