@@ -7,20 +7,27 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.example.examen_1_parcial_pm1.clases.Contactos;
 import com.example.examen_1_parcial_pm1.clases.SQLiteConexion;
 import com.example.examen_1_parcial_pm1.clases.Transacciones;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +106,15 @@ public class ActivityLista extends AppCompatActivity {
 
             }
         });
+
+//        btnVerImagen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent ver = new Intent(getApplicationContext(), ActivityVerImagen.class);
+//                ver.putExtra("id", listaContactos.get(i).getId().toString());
+//                startActivity(ver);
+//            }
+//        });
     }
 
     private void onClickAtras(View view) {
