@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         init();
         btnAgregar.setOnClickListener(this::onClickAgregar);
         btnTomarFoto.setOnClickListener(this::onClickTakePhoto);
+        btnConsultar.setOnClickListener(this::onClickMostrarContacto);
     }
 
     protected void onClickTakePhoto(View view){
@@ -62,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
                 agregar();
             }else message("Debe agregar una imagen");
         }else message("Hay campos vacíos");
+    }
+
+    protected void onClickMostrarContacto(View view){
+        Intent intent = new Intent(getApplicationContext(), ActivityLista.class);
+        startActivity(intent);
     }
 
     protected void agregar(){
