@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#068A00</color>
     <color name="blue">#14969B</color>
+     android:background=""
+
 </resources>
