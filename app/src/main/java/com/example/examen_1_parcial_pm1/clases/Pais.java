@@ -1,7 +1,7 @@
 package com.example.examen_1_parcial_pm1.clases;
 
 public class Pais {
-    private  Integer id;
+    private Integer id;
     private String nombrePais;
 
     public Pais(Integer id,  String nombrePais) {

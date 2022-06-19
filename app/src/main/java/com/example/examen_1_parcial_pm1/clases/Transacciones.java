@@ -4,6 +4,7 @@ public class Transacciones {
     public static final String nameDatabase = "DBRegistro";
 
     public static final String tablaContactos = "contactos";
+    public static final String tablaPais = "pais";
 
     public static final String id = "id";
     public static final String nombre = "nombre";

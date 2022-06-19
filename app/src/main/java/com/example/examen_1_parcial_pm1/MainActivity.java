@@ -8,14 +8,17 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -23,15 +26,20 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.examen_1_parcial_pm1.clases.Contactos;
+import com.example.examen_1_parcial_pm1.clases.Pais;
 import com.example.examen_1_parcial_pm1.clases.SQLiteConexion;
 import com.example.examen_1_parcial_pm1.clases.Transacciones;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     static  final int REQUESTCODECAMARA = 100;
     static  final int REQUESTTAKEPHOTO = 101;
+    ArrayList<Pais> listaPaies;
+    ArrayList<String> argPaises;
     Contactos contact = new Contactos();
+    Pais paises;
 
     EditText txtNombre;
     EditText txtTelefono;
@@ -51,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
         btnAgregar.setOnClickListener(this::onClickAgregar);
         btnTomarFoto.setOnClickListener(this::onClickTakePhoto);
         btnConsultar.setOnClickListener(this::onClickMostrarContacto);
+        btnActivityPaises.setOnClickListener(this::onClickActivityPaises);
+    }
+
+    private void onClickActivityPaises(View view) {
+        Intent paises = new Intent(getApplicationContext(), ActivityAgregar_Paises.class);
+        startActivity(paises);
     }
 
     protected void onClickTakePhoto(View view){
@@ -61,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         if(!emptyField()){
             if(imgFoto.getDrawable() != null){
                 agregar();
-            }else message("Debe agregar una imagen");
-        }else message("Hay campos vacíos");
+            }else message(this,"Debe agregar una imagen");
+        }else message(this,"Hay campos vacíos");
     }
 
     protected void onClickMostrarContacto(View view){
@@ -81,11 +95,11 @@ public class MainActivity extends AppCompatActivity {
             values.put(Transacciones.nota, txtNota.getText().toString());
             values.put(Transacciones.imagen, contact.getImagen());
             Long result = db.insert(Transacciones.tablaContactos, Transacciones.id, values);
-            message("Datos guardados exitosamente ");
+            message(this,"Datos guardados exitosamente ");
             db.close();
             cleanFields();
         }catch (Exception ex){
-            message(ex.getMessage());
+            message(this,ex.getMessage());
         }
     }
 
@@ -115,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == REQUESTCODECAMARA) {
             if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) takePhoto();
-            else message("Permiso denegado");
+            else message(this,"Permiso denegado");
         }
     }
 
@@ -142,8 +156,15 @@ public class MainActivity extends AppCompatActivity {
         spPais = (Spinner) findViewById(R.id.spPais);
         btnAgregar = (Button) findViewById(R.id.btnGuardarDatos);
         btnConsultar = (Button) findViewById(R.id.btnConsultarDatos);
-        btnActivityPaises = (Button) findViewById(R.id.btnTomarFoto);
+        btnActivityPaises = (Button) findViewById(R.id.btnActivityPaises);
         btnTomarFoto = (Button) findViewById(R.id.btnTomarFoto);
+        try {
+            cargarSpinner();
+            ArrayAdapter<CharSequence> adp = new ArrayAdapter(this, android.R.layout.simple_spinner_item, argPaises);
+            spPais.setAdapter(adp);
+        }catch (Exception ex){
+            message(this, ex.getMessage());
+        }
     }
 
     private boolean emptyField(){
@@ -153,7 +174,33 @@ public class MainActivity extends AppCompatActivity {
         else return false;
     }
 
-    public void message(String msg){
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+    public static void message(Context c, String msg){
+        Toast.makeText(c, msg, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void cargarSpinner(){
+        try {
+            SQLiteConexion conexion = new SQLiteConexion(getApplicationContext(), Transacciones.nameDatabase, null, 1);
+            SQLiteDatabase db = conexion.getReadableDatabase();
+            listaPaies = new ArrayList<Pais>();
+            Cursor cursor = db.rawQuery("SELECT * FROM "+Transacciones.tablaPais, null);
+
+            while(cursor.moveToNext()){
+                paises = new Pais();
+                paises.setId(cursor.getInt(0));
+                paises.setNombrePais(cursor.getString(1));
+                listaPaies.add(paises);
+            }
+            fillList();
+        }catch (Exception ex){
+            message(this, ex.getMessage());
+        }
+    }
+
+    protected void fillList() {
+        argPaises = new ArrayList<String>();
+        for(int i = 0; i<listaPaies.size(); i ++){
+            argPaises.add(listaPaies.get(i).getNombrePais());
+        }
     }
 }
