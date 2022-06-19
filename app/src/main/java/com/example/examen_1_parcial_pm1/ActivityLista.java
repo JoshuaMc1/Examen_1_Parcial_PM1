@@ -75,16 +75,14 @@ public class ActivityLista extends AppCompatActivity {
         }).setTitle("Acción").setMessage("¿Desea llamar a "+listaContactos.get(i).getNombre()+"?").create();
         dialogo.show();
 
-        btnVerImagen.setOnClickListener(v -> {
-            try {
-                Intent verVentana = new Intent(v.getContext(), ActivityVerImagen.class);
-                Bundle bnd = new Bundle();
-                bnd.putString("titulo", listaContactos.get(i).getNombre());
-                bnd.putByteArray("foto", listaContactos.get(i).getImagen());
-                verVentana.putExtras(bnd);
-                startActivity(verVentana);
-            }catch (Exception ex){
-                MainActivity.message(getApplicationContext(), ex.getMessage());
+        btnVerImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    abrirVentana(i);
+                }catch (Exception ex){
+                    MainActivity.message(getApplicationContext(), ex.getMessage());
+                }
             }
         });
 
@@ -119,6 +117,15 @@ public class ActivityLista extends AppCompatActivity {
 
             }
         });
+    }
+
+    protected void abrirVentana(int i){
+        Intent ver = new Intent(this, ActivityVerImagen.class);
+        Bundle bnd = new Bundle();
+        bnd.putString("titulo", listaContactos.get(i).getNombre());
+        bnd.putByteArray("foto", listaContactos.get(i).getImagen());
+        ver.putExtras(bnd);
+        startActivity(ver);
     }
 
     private void onClickAtras(View view) {
