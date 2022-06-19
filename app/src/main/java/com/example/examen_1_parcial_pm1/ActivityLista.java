@@ -107,14 +107,17 @@ public class ActivityLista extends AppCompatActivity {
             }
         });
 
-//        btnVerImagen.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent ver = new Intent(getApplicationContext(), ActivityVerImagen.class);
-//                ver.putExtra("id", listaContactos.get(i).getId().toString());
-//                startActivity(ver);
-//            }
-//        });
+        btnVerImagen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ver = new Intent(getApplicationContext(), ActivityVerImagen.class);
+                Bundle bnd = new Bundle();
+                bnd.putString("titulo", listaContactos.get(i).getNombre());
+                bnd.putByteArray("foto", listaContactos.get(i).getImagen());
+                ver.putExtras(bnd);
+                startActivity(ver);
+            }
+        });
     }
 
     private void onClickAtras(View view) {
